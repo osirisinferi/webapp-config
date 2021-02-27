@@ -604,6 +604,14 @@ class Config:
                                'or version number as arguments to restrict the '
                                'listing.')
 
+        info_opts.add_argument('-la',
+                               '--list-all-installs',
+                               nargs = '*',
+                               help = 'List all the master images currently ava'
+                               'ilable. Optionally, provide a package and/or ve'
+                               'rsion number as arguments to restrict the listi'
+                               'ng.')
+
         info_opts.add_argument('-pd',
                                '--prune-database',
                                choices = ['pretend',
@@ -953,7 +961,7 @@ class Config:
 
         # set the action to be performed
         work = ['install', 'clean', 'upgrade', 'list_installs',
-                'list_servers', 'list_unused_installs',
+                'list_servers', 'list_unused_installs', 'list_all_installs',
                 'prune_database', 'show_installed', 'show_postinst',
                 'show_postupgrade', 'check_config', 'query']
 
@@ -1200,6 +1208,16 @@ class Config:
 
             # Compare this against the installed web applications
             self.create_webapp_source().listunused(db)
+
+        if self.work == 'list_all_installs':
+            # Get the handler for the virtual install db
+            self.__r = wrapper.get_root(self)
+            db = self.create_webapp_db( self.maybe_get('cat'),
+                                        self.maybe_get('pn'),
+                                        self.maybe_get('pvr'))
+
+            # Compare this against the installed web applications
+            self.create_webapp_source().listall(db)
 
         if self.work == 'list_installs':
             # Get the handler for the virtual install db and list the

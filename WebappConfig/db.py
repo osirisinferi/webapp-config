@@ -577,6 +577,30 @@ class WebappSource(AppHierarchy):
                     OUT.notice(packages[i][1] + '-' + packages[i][2])
 
 
+    def listall(self, db):
+        '''
+        Outputs a list of all available packages
+        '''
+
+        packages = self.list_locations()
+
+        if not packages:
+            OUT.die('No packages found!')
+
+        keys = sorted(packages)
+
+        for i in keys:
+
+            db.set_category(packages[i][0])
+            db.set_package (packages[i][1])
+            db.set_version (packages[i][2])
+
+            if packages[i][0]:
+                OUT.notice(packages[i][0] + '/' + packages[i][1] + '-' + packages[i][2])
+            else:
+                OUT.notice(packages[i][1] + '-' + packages[i][2])
+
+
     def packageavail(self):
         '''
         Check to see whether the given package has been installed or not.
